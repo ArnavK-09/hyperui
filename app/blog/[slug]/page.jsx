@@ -13,6 +13,7 @@ import Container from '@component/Container'
 import BlogPreview from '@component/BlogPreview'
 import TableContent from '@component/BlogTableContent'
 import MdxRemoteRender from '@component/MdxRemoteRender'
+import { notFound } from 'next/navigation'
 
 const mdxComponents = {
   BlogPreview,
@@ -45,7 +46,7 @@ export async function generateStaticParams() {
 
 async function getPost(params) {
   const postPath = join(postsPath, `${params.slug}.mdx`)
-  const postItem = await fs.readFile(postPath, 'utf-8')
+  const postItem = await fs.readFile(postPath, 'utf-8').catch(() => notFound())
 
   const { content, data: frontmatter } = matter(postItem)
 
